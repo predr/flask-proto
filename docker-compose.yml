@@ -1,0 +1,31 @@
+#
+# Docker compose file running Flask app in development (debug) mode
+# https://docs.docker.com/compose/compose-file/
+#
+version: "3.7"
+services:
+  app:
+
+    # Use latest Python Docker image
+    image: "python:latest"
+
+    # Set container name
+    container_name: flask-proto
+
+    # Set environment variables
+    environment:
+      - FLASK_ENV=development
+      - FLASK_APP=/repo/src/app.py
+      - DATABASE=/repo/sqlite.db
+
+    # Mount entire project into docker container under /repo
+    volumes:
+      - ./:/repo
+
+    # Make all ports accessible on host
+    network_mode: host
+
+    # Install requirements and start flask app
+    entrypoint: >
+      bash -c "pip install -r /repo/requirements.txt
+      && flask run"
